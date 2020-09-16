@@ -9,3 +9,11 @@ ChatMessage.setReactions = function(messageId, reactions) {
 ChatMessage.unsetReactions = function(messageId) {
 	return this.update({ _id: messageId }, { $unset: { reactions: 1 } });
 };
+
+ChatMessage.setVote = function(messageId, votes) {
+	return this.update({ _id: messageId }, { $set: { votes } });
+};
+
+ChatMessage.unsetVote = function(messageId) {
+	return this.update({ _id: messageId }, { $unset: { votes: 1 } });
+};

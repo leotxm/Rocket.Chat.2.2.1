@@ -1,0 +1,1 @@
+export { setVote } from './setVote';

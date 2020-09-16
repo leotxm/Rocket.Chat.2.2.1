@@ -96,6 +96,20 @@ const renderBody = (msg, settings) => {
 };
 
 Template.message.helpers({
+	upvote() {
+		const { msg } = this;
+		if (!!msg.votes && !!msg.votes.upvote) {
+			return 	msg.votes.upvote.length;
+		}
+		return 0;
+	},
+	downvote() {
+		const { msg } = this;
+		if (!!msg.votes && !!msg.votes.downvote) {
+			return 	msg.votes.downvote.length;
+		}
+		return 0;
+	},
 	body() {
 		const { msg, settings } = this;
 		return Tracker.nonreactive(() => renderBody(msg, settings));
@@ -604,9 +618,30 @@ const processSequentials = ({ currentNode, settings, forceDate, showDateSeparato
 		}
 		templateInstance.sendToBottomIfNecessary();
 	}
+	const messageDislike = $('.dislike');
+	const messageLike = $('.like');
+
+	// @TODO: move to lib
+	messageDislike.on('click', async function(event) {
+		event.stopPropagation();
+		try {
+			await call('setVote', { msgId: messageDislike.parent().last().attr('data-msgId'), voteType: 'downvote' });
+		} catch (e) {
+			throw new Meteor.Error('403', 'Vote failed', e);
+		}
+	});
+
+	messageLike.on('click', async function(event) {
+		event.stopPropagation();
+		try {
+			await call('setVote', { msgId: messageDislike.parent().last().attr('data-msgId'), voteType: 'upvote' });
+		} catch (e) {
+			throw new Meteor.Error('403', 'Vote failed', e);
+		}
+	});
 };
 
-Template.message.onRendered(function() { // duplicate of onViewRendered(NRR) the onRendered works only for non nrr templates
+Template.message.onRendered(function() {
 	this.autorun(() => {
 		const currentNode = this.firstNode;
 		processSequentials({ currentNode, ...messageArgs(Template.currentData()) });

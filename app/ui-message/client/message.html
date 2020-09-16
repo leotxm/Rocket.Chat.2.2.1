@@ -82,6 +82,16 @@
 					{{/if}}
 				</div>
 			</div>
+			<div class="compact message-votes" data-msgId="{{msg._id}}">
+					<button class="like js-like">
+						<img style="max-width: 15px" src="images/Thumb_up_icon.svg"/>
+						<div class="counter">{{upvote}}</div>
+					</button>
+					<button class="dislike js-dislike">
+						<img style="max-width: 15px;transform: rotate(180deg)" src="images/Thumb_up_icon.svg"/>
+						<div class="counter">{{downvote}}</div>
+					</button>
+			</div>
 
 			{{#if hasOembed}}
 				{{#each msg.urls}}

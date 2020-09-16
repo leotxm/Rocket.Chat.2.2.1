@@ -66,6 +66,14 @@ export class Messages extends Base {
 		});
 	}
 
+	setVote(messageId, votes) {
+		return this.update({ _id: messageId }, { $set: { votes } });
+	}
+
+	unsetVote(messageId) {
+		return this.update({ _id: messageId }, { $unset: { votes: 1 } });
+	}
+
 	createRoomArchivedByRoomIdAndUser(roomId, user) {
 		return this.createWithTypeRoomIdMessageAndUser('room-archived', roomId, '', user);
 	}
